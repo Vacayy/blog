@@ -1,0 +1,65 @@
+---
+import type { GetStaticPaths } from 'astro';
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { SITE } from '../../consts';
+import { getPosts, formatDate } from '../../lib/posts';
+
+export const getStaticPaths = (async () => {
+  const posts = await getPosts();
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
+}) satisfies GetStaticPaths;
+
+const { post } = Astro.props;
+const { title, description, date, updated, draft } = post.data;
+const { Content } = await render(post);
+
+const url = new URL(Astro.url.pathname, Astro.site).href;
+const image = `/og/${post.id}.png`;
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: title,
+  description,
+  datePublished: date.toISOString(),
+  dateModified: (updated ?? date).toISOString(),
+  inLanguage: SITE.lang,
+  url,
+  mainEntityOfPage: url,
+  image: new URL(image, Astro.site).href,
+  author: { '@type': 'Person', name: SITE.author, url: new URL('/about/', Astro.site).href },
+};
+---
+
+<Base
+  title={title}
+  description={description}
+  image={image}
+  type="article"
+  published={date}
+  updated={updated}
+  noindex={draft}
+  jsonLd={jsonLd}
+  markdown={`/posts/${post.id}.md`}
+>
+  <article>
+    <header>
+      <h1>{title}</h1>
+      <p class="meta">
+        <time datetime={date.toISOString()}>{formatDate(date)}</time>
+        {
+          updated && (
+            <>
+              {' · 수정 '}
+              <time datetime={updated.toISOString()}>{formatDate(updated)}</time>
+            </>
+          )
+        }
+      </p>
+    </header>
+    <Content />
+  </article>
+  <hr />
+  <p><a href="/">← 목록으로</a></p>
+</Base>

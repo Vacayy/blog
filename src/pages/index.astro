@@ -1,0 +1,42 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE } from '../consts';
+import { getPosts, formatDate } from '../lib/posts';
+
+const posts = await getPosts();
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: SITE.title,
+  url: new URL('/', Astro.site).href,
+  description: SITE.description,
+  inLanguage: SITE.lang,
+  author: { '@type': 'Person', name: SITE.author, url: new URL('/about/', Astro.site).href },
+};
+---
+
+<Base jsonLd={jsonLd}>
+  <h1 class="visually-hidden">{SITE.title}</h1>
+  <p>{SITE.description}</p>
+
+  <section aria-labelledby="posts-heading">
+    <h2 id="posts-heading">글</h2>
+    {
+      posts.length === 0 ? (
+        <p>아직 글이 없습니다.</p>
+      ) : (
+        <ul class="posts">
+          {posts.map((post) => (
+            <li>
+              <a href={`/posts/${post.id}/`}>{post.data.title}</a>
+              <p>
+                <time datetime={post.data.date.toISOString()}>{formatDate(post.data.date)}</time>
+              </p>
+            </li>
+          ))}
+        </ul>
+      )
+    }
+  </section>
+</Base>

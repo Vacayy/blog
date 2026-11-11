@@ -1,0 +1,92 @@
+---
+import { SITE } from '../consts';
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  /** 사이트 루트 기준 OG 이미지 경로 */
+  image?: string;
+  imageAlt?: string;
+  type?: 'website' | 'article';
+  published?: Date;
+  updated?: Date;
+  noindex?: boolean;
+  jsonLd?: Record<string, unknown>;
+  /** 같은 내용의 Markdown 버전 경로 (LLM용) */
+  markdown?: string;
+}
+
+const {
+  title,
+  description = SITE.description,
+  image = '/og.png',
+  imageAlt = title ?? SITE.title,
+  type = 'website',
+  published,
+  updated,
+  noindex = false,
+  jsonLd,
+  markdown,
+} = Astro.props;
+
+const pageTitle = title ? `${title} | ${SITE.title}` : SITE.title;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const imageUrl = new URL(image, Astro.site);
+const path = Astro.url.pathname;
+---
+
+<!doctype html>
+<html lang={SITE.lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <meta name="author" content={SITE.author} />
+    {noindex ? <meta name="robots" content="noindex" /> : <link rel="canonical" href={canonical} />}
+
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#111111" media="(prefers-color-scheme: dark)" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="alternate" type="application/rss+xml" title={SITE.title} href="/rss.xml" />
+    <link rel="sitemap" href="/sitemap.xml" />
+    {markdown && <link rel="alternate" type="text/markdown" href={markdown} />}
+
+    <meta property="og:type" content={type} />
+    <meta property="og:site_name" content={SITE.title} />
+    <meta property="og:locale" content={SITE.locale} />
+    <meta property="og:title" content={title ?? SITE.title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={imageUrl} />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={imageAlt} />
+    {published && <meta property="article:published_time" content={published.toISOString()} />}
+    {updated && <meta property="article:modified_time" content={updated.toISOString()} />}
+    {type === 'article' && <meta property="article:author" content={new URL('/about/', Astro.site)} />}
+    <meta name="twitter:card" content="summary_large_image" />
+
+    {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
+  </head>
+  <body>
+    <a class="skip" href="#main">본문으로 건너뛰기</a>
+    <header>
+      <nav aria-label="주 메뉴">
+        <a href="/" class="home" aria-current={path === '/' ? 'page' : undefined}>{SITE.title}</a>
+        <a href="/about/" aria-current={path === '/about/' ? 'page' : undefined}>About</a>
+      </nav>
+    </header>
+    <main id="main">
+      <slot />
+    </main>
+    <footer>
+      <p>
+        © {new Date().getFullYear()} {SITE.author} · <a href="/rss.xml">RSS</a> · <a href={SITE.github} rel="me">GitHub</a>
+      </p>
+    </footer>
+  </body>
+</html>
