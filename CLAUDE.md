@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-Juyeong Kim의 개인 블로그(https://juyeong.kim). 생각을 담은 글 위주의 담백한 정적 사이트다. Astro 7, Cloudflare Pages.
+Juyeong Kim의 개인 블로그(https://juyeong.kim). 생각을 담은 글 위주의 담백한 정적 사이트다. Astro 7, Cloudflare Workers(정적 자산, `wrangler.jsonc`).
 
 ## 원칙
 

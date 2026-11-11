@@ -1,6 +1,6 @@
 # juyeong.kim
 
-Juyeong Kim의 개인 블로그. Astro로 만든 정적 사이트이고 Cloudflare Pages에서 서비스한다.
+Juyeong Kim의 개인 블로그. Astro로 만든 정적 사이트이고 Cloudflare Workers(정적 자산)로 서비스한다.
 
 클라이언트 JavaScript 없음, 웹폰트 없음(시스템 폰트), CSS는 HTML에 인라인. Lighthouse 모바일 4개 항목 100점을 기준으로 유지한다.
 
@@ -40,7 +40,7 @@ python3 -I .claude/skills/write-post/scripts/import_naver.py <네이버 글 URL>
 
 ## 발행
 
-`main`에 push하면 Cloudflare Pages가 빌드해 배포한다(1~2분). 다른 브랜치와 PR은 미리보기 URL로 배포된다.
+`main`에 push하면 Cloudflare Workers Builds가 빌드해 배포한다(1~2분).
 
 ```sh
 git add src/content/posts/2026-11-11-new-post.md
@@ -63,14 +63,15 @@ git push
 
 ### Cloudflare
 - 도메인: `juyeong.kim`(등록: 후이즈, DNS: Cloudflare)
-- Pages 빌드 설정: 프리셋 Astro, 빌드 명령 `pnpm build`, 출력 `dist`. Node는 `.node-version`, pnpm은 `package.json`의 `packageManager`로 고정
+- Workers 설정: `wrangler.jsonc`(서버 코드 없이 `dist`만 서비스). 빌드 명령 `pnpm build`, 배포 명령 `pnpm exec wrangler deploy`
+- Node는 `.node-version`, pnpm은 `package.json`의 `packageManager`로 고정. 설치 스크립트 허용 목록은 `pnpm-workspace.yaml`
 - `www.juyeong.kim` → `https://juyeong.kim` 301 리다이렉트
 - 끄고 유지할 설정과 이유:
   - 이메일 주소 난독화: 켜면 페이지에 JS가 주입된다
   - Bot Fight 모드: AI 에이전트와 크롤러를 막을 수 있다
   - Rocket Loader 등 자동 최적화: 필요 없다
 - AI Crawl Control: 검색, 에이전트 허용. robots.txt에 Bot Preference Sync 내용이 앞에 붙는다
-- 통계: Pages 프로젝트의 Web Analytics(쿠키 없음, Core Web Vitals 포함)
+- 통계: Cloudflare Web Analytics(쿠키 없음, Core Web Vitals 포함)
 
 ### 검색엔진
 - Google Search Console, Bing Webmaster Tools, 네이버 서치어드바이저에 등록하고 `https://juyeong.kim/sitemap.xml`을 제출한다. Bing은 ChatGPT 검색과 Copilot의 색인이다

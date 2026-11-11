@@ -26,3 +26,6 @@ pnpm-debug.log*
 # local tooling
 graft/
 .ignore
+
+# wrangler local state
+.wrangler/

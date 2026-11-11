@@ -67,6 +67,6 @@ pnpm build && pnpm check
   ```
 
 ## 발행
-- `main`에 push하면 Cloudflare Pages가 1~2분 안에 배포한다. 다른 브랜치는 미리보기 URL로 배포된다.
+- `main`에 push하면 Cloudflare Workers Builds가 1~2분 안에 배포한다.
 - 커밋 메시지: `post: <글 제목>` / 수정은 `post: <글 제목> 수정`.
 - 커밋·push는 사용자가 요청했을 때만 한다.
