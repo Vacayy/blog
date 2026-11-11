@@ -40,6 +40,13 @@ pnpm dev | pnpm build | pnpm preview | pnpm check
 
 `astro check`는 TypeScript 7을 지원하지 않아 TypeScript 6으로 고정했다.
 
+## 운영
+
+- 배포: `main` push → Cloudflare Workers Builds(`pnpm build` → `pnpm exec wrangler deploy`). pnpm 설치 스크립트 허용 목록은 `pnpm-workspace.yaml`.
+- 도메인: 후이즈 등록, Cloudflare DNS. www→루트 301은 리디렉션 규칙, HTTP→HTTPS는 "항상 HTTPS 사용".
+- Cloudflare에서 꺼 둔 것: 이메일 주소 난독화(JS 주입), Bot Fight 모드(AI 크롤러 차단 위험), workers.dev 프로덕션 URL(중복 주소).
+- 통계: Cloudflare Web Analytics(자동 삽입). 검색: Google Search Console, Bing(GSC에서 가져옴), 네이버 서치어드바이저(`Base.astro`의 `naver-site-verification` 태그 — 지우지 않는다).
+
 ## 글 작업
 
 글 작성·이전·발행은 `write-post` skill을 따른다.
