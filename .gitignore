@@ -29,3 +29,6 @@ graft/
 
 # wrangler local state
 .wrangler/
+
+# 개인 메모 (커밋하지 않음)
+private/
