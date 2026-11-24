@@ -11,7 +11,7 @@ Juyeong Kim의 개인 블로그(https://juyeong.kim). 생각을 담은 글 위�
 - **CSS는 `src/styles/global.css` 하나**, HTML에 인라인된다. 유틸리티 CSS 프레임워크를 들이지 않는다.
 - **외부 스크립트 금지.** 분석(Cloudflare Web Analytics)은 Cloudflare가 주입하므로 코드에 넣지 않는다.
 - **Lighthouse 4개 항목 100**(모바일)이 기준. 바꾼 뒤 점수가 떨어지면 원인을 고친다.
-- 다크 모드는 `prefers-color-scheme`가 기본, 헤더 토글로 라이트/다크/시스템 3상태를 순환하며 `localStorage.theme`에 저장된다.
+- 다크 모드는 기본 라이트, 헤더 토글로 라이트/다크 전환하며 `localStorage.theme`에 저장된다. OS 설정은 따르지 않는다.
 
 ## 구조
 

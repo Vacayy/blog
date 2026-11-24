@@ -1,5 +1,5 @@
 :root {
-  color-scheme: light dark;
+  color-scheme: light;
   --bg: #fff;
   --fg: #1a1a1a;
   --muted: #6b6b6b;
@@ -15,23 +15,13 @@
 }
 
 :root[data-theme='dark'] {
+  color-scheme: dark;
   --bg: #111;
   --fg: #e6e6e6;
   --muted: #9a9a9a;
   --line: #2a2a2a;
   --link: #8ab4f8;
   --code-bg: #1c1c1c;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme='light']) {
-    --bg: #111;
-    --fg: #e6e6e6;
-    --muted: #9a9a9a;
-    --line: #2a2a2a;
-    --link: #8ab4f8;
-    --code-bg: #1c1c1c;
-  }
 }
 
 *,
@@ -104,15 +94,11 @@ header .home {
   height: 1.1rem;
   display: none;
 }
-#theme-toggle .icon-system {
+#theme-toggle .icon-light {
   display: inline;
 }
-:root[data-theme='light'] #theme-toggle .icon-system,
-:root[data-theme='dark'] #theme-toggle .icon-system {
+:root[data-theme='dark'] #theme-toggle .icon-light {
   display: none;
-}
-:root[data-theme='light'] #theme-toggle .icon-light {
-  display: inline;
 }
 :root[data-theme='dark'] #theme-toggle .icon-dark {
   display: inline;
@@ -201,14 +187,6 @@ pre {
 :root[data-theme='dark'] .astro-code span {
   color: var(--shiki-dark) !important;
   background-color: var(--shiki-dark-bg) !important;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme='light']) .astro-code,
-  :root:not([data-theme='light']) .astro-code span {
-    color: var(--shiki-dark) !important;
-    background-color: var(--shiki-dark-bg) !important;
-  }
 }
 
 table {
